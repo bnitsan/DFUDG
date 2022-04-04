@@ -10,6 +10,7 @@
 
 clear all;
 addpath(genpath('src'))
+addpath(genpath('data'))
 
 %% set default models and parameters
 
@@ -46,7 +47,7 @@ IsoVsCircFlag=0;       % 0: isotropic dist, 1: circ dist
 
 tolFactor=3e6; % in comparison to 1e-13/1e-12 rel/abs or so built-in the code
 
-NUMExamples=40; % simulations number in each 
+NUMExamples=1; % simulations number in each 
 
 deltaTCoarseTime = 0.005; % time-step after saving 
 dtFactor = 0.5; 
@@ -336,7 +337,7 @@ MassNormMean=-1; MassNormVar=0.3; % not relevant when massScaleIn is array
 
 rng(0);
 for ii=1:NUMExamples
-    SimStructT = RunSimV4MassLossStall(HaloParam,GCSersicRadius,nSersicGCs,Nin,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,massScaleIn,MassNormMean,MassNormVar,MergeRadius,TidalRadius,tolFactor,dtFactor,MGCMhaloRestrictFraction,TotalLossFraction);
+    SimStructT = RunSimMassLossStall(HaloParam,GCSersicRadius,nSersicGCs,Nin,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,massScaleIn,MassNormMean,MassNormVar,MergeRadius,TidalRadius,tolFactor,dtFactor,MGCMhaloRestrictFraction,TotalLossFraction);
     Struct1A{ii} = ReduceStruct(SimStructT,deltaTCoarseTime,MassNormMean,MassNormVar);
     clear SimStructT
 end
@@ -351,7 +352,7 @@ Nin = length(massScaleIn);
 MassNormMean=-3; MassNormVar=0.3; % not relevant when massScaleIn is array except as flag
 rng(0);
 for ii=1:NUMExamples
-    SimStructT = RunSimV4MassLossStall(HaloParam,GCSersicRadius,nSersicGCs,Nin,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,massScaleIn,MassNormMean,MassNormVar,MergeRadius,TidalRadius,tolFactor,dtFactor,MGCMhaloRestrictFraction,TotalLossFraction);
+    SimStructT = RunSimMassLossStall(HaloParam,GCSersicRadius,nSersicGCs,Nin,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,massScaleIn,MassNormMean,MassNormVar,MergeRadius,TidalRadius,tolFactor,dtFactor,MGCMhaloRestrictFraction,TotalLossFraction);
     Struct1A{ii} = ReduceStruct(SimStructT,deltaTCoarseTime,MassNormMean,MassNormVar);
     clear SimStructT
 end

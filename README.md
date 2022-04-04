@@ -4,7 +4,7 @@ An N-body simulation with semi-analytic dynamical friction, geared towards dynam
 
 ## Sample Results
 <p align="center">
-<img src="FigResults.png" width="500" alt="An example result of a simulation suite in an Burkert profile" title="Burkert profile">
+<img src="FigResults.png" width="350" alt="An example result of a simulation suite in an Burkert profile" title="Burkert profile">
 </p>
 
 The above is an example of the result of 40 realizations of 33 massive candidate globular clusters (GCs) of NGC5846-UDG1 in a Burkert profile, integrated over 10 Gyr. Initial conditions of GCs are taken to be common across different GC masses. Eq. (2) approx. refers to a simple analytic approximation developed in Bar et al. (2022) (see below) which reasonably agrees with simulations.

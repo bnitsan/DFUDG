@@ -18,21 +18,21 @@ elseif HaloParameters.type == 3
 end
 [rSGCs,densitySGCs,massSGCs,~,~]=getSersic(nSersicGCs,MSersicGCs,rSersicGCs);
 
-%tMax = SimTime; % max integration time (Gyr)
 G=0.449; % gravitational constant
 N=Nin; % number of objects
 Gn = G*GnFrac; % the gravitational constant between point masses; allows us to turn off nbody
-%TauFudgeFac=TauFudgeFactor; % DF fudge scale - 1 if DF is as usual, very large is DF is suppressed
+IsotropicVsCircular=IsoVsCircFlag; % assume 0 = isotropic, 1 = circular
+epsilon = SofteningRadKpc; % softening radius for Plummer model of GCs
+
+% initialize a stalling factor of dynamical friction
 TauInStall = 50;
 rStall=HaloParameters.rStall;
 TauFudgeFac=((rS<rStall)*TauInStall+(rS>=rStall)*0)*TauFudgeFactorOverall; % this factor gets added to tau, no multiplied
 
+% initalize parameters of mass loss
 TimeStepMassLoss = 0.1;
 MassLossFractionPerStep = TimeStepMassLoss*TotalLossFraction;
 IntegratedLoss = TotalLossFraction*SimTime;
-
-IsotropicVsCircular=IsoVsCircFlag; % assume 0 = isotropic, 1 = circular
-epsilon = SofteningRadKpc;
 
 % initialize GC mass function and mass loss
 if length(massScaleIn)>1 % if massScaleIn represents already an input GC mass list 
@@ -56,8 +56,8 @@ if HaloParameters.type == 1
     phiS     = MLRatio*phiS;    
 end
 
-critRadius=MergeRadius; %radius below which GCs may merge
-rTidal=TidalRadius ;
+critRadius=MergeRadius; % radius below which GCs may merge
+rTidal=TidalRadius;     % radius above which GCs assumed to be tidally disrupted
 
 Rchar = 1*rSersicGCs; % charcteristic radius, used in timescale estimate of integration
 rmerged = TidalRadius-0.1;   % where to put GCs after merger
@@ -66,9 +66,11 @@ rmerged = TidalRadius-0.1;   % where to put GCs after merger
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% INITIALIZE RANDOM VARIABLES 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INITIALIZE RANDOM PHASE-SPACE %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% POSITIONS
 % azimuthal angles
 phi      = rand(N,1)*2*pi;
 costheta = rand(N,1)*2-1;
@@ -87,21 +89,8 @@ rc0=sqrt(X.^2+Y.^2+Z.^2);
 
 r=[X Y Z];                  % position vectors of all masses
 
-% Finding (configuration) Potential energy of each mass in the gravitational field due to all other masses
-% this is only an estimate for the time-step. Later energy is better computed
-PE=zeros(N,1);
-for i=1:N
-    for j=1:N
-        if i~=j
-            PE(i)=PE(i)-Gn*m(i)./((r(j,1)-r(i,1))^2+(r(j,2)-r(i,2))^2+(r(j,3)-r(i,3))^2)/2; % P.E. of mass i due to all j's
-        end
-    end
-    PE(i) = PE(i) + interp1(rS,phiS,norm(r(i,:)));
-end
-%v0=sqrt(-PE/2); % orbital Keplerian speeds for circular orbit (PE=2*KE) for each mass
-
-
-if IsotropicVsCircular==0
+% VELOCITIES
+if IsotropicVsCircular==0   % 0 - isotropic distribution
     GCDensityInterp1 = interp1(rSGCs,densitySGCs,rS);
     GCDensityInterp1(isnan(GCDensityInterp1))=0;
     [rr,VFStructsF] = getDistributionFunctionErgodic(rS,GCDensityInterp1,massS,sigmaS,phiS);
@@ -130,7 +119,7 @@ if IsotropicVsCircular==0
     vy = vRand.*sin(phiV).*sqrt(1-costhetaV.^2);        
     vz = vRand.*costhetaV;               
 
-else
+else % circular velocity distribution
     vcircr   = sqrt(G*interp1(rS,massS,rs)./rs);
     phiP     = rand(N,1)*2*pi;
     vxp      = vcircr.*cos(phiP);
@@ -152,14 +141,11 @@ Ncurrent=N;
 MergeList=[];
 tMin = 0;
 tMax = TimeStepMassLoss;
-%n_dts=360*128*dtFactor; % how many of timesteps per one period of the orbit
-%dt=max(2*pi*Rchar/v0)/n_dts % timestep: n_dts steps per period of period
 dt= dtFactor*1e-5*2*pi*Rchar/sigmaS(find(rS>=Rchar,1,'first'));
 
 inits=[X Y Z vx vy vz]; % initial conditions for each mass -- all in 1 column, 6 rows for ode solvers
 
 options = odeset('reltol',1e-13*toleranceFactor,'abstol',1e-12*toleranceFactor,'Events',@MergerEvent); % tolerance for ode solver
-%options = odeset('reltol',1e-5,'abstol',1e-4,'Events',@MergerEvent); % tolerance for ode solver
 
 epsilonTime = dt;
 stops=0;
@@ -169,7 +155,8 @@ XXXg  = [];
 mtabg = [];
 
 for kk = 1:round(SimTime/TimeStepMassLoss)
-    time_span=tMin:dt:tMax;
+    %time_span=tMin:dt:tMax; % fixed mesh
+    time_span=[tMin tMax];   % adaptive mesh, let ode45 figure it
     
     [TTT,XXX] = ode45(@nbodyCSoft,time_span,inits,options); %apparently this form is not as precise
 
@@ -193,7 +180,6 @@ for kk = 1:round(SimTime/TimeStepMassLoss)
         elseif maxrc+0.01>=rTidal
             [initsnew, XXXnew]=CutTidalExit(XXX(end,:));
             disp('Exited tidal radius!')      
-            % CutTidalExit changes realMergeTidal merger is of a "zero-mass" GC
         end
         disp(strcat('Time at stop: ',num2str(TTT(end))));
         XXX(end,:) = XXXnew;
@@ -210,6 +196,7 @@ for kk = 1:round(SimTime/TimeStepMassLoss)
             time_span = [time_span (time_span+1e-7)]; % small bandaid if sims stop immediately, rare case
             disp('woops');
         end
+        time_span = [time_span(1) time_span(end)]; % override with adaptive mesh
         
         [TTT,XXX] = ode45(@nbodyCSoft,time_span,initsnew,options);
         onelen = ones(length(TTT),1);
@@ -227,7 +214,7 @@ for kk = 1:round(SimTime/TimeStepMassLoss)
     
     m = mtab(end,:)' - MassLossPerStep;
     
-    if HaloParameters.type == 1
+    if HaloParameters.type == 1 % Stars-case: add mass to stars, modify properties
         MLRatio  = (massS(end)+sum(MassLossPerStep))/massS(end);
         massS    = MLRatio*massS;
         densityS = MLRatio*densityS;
