@@ -9,6 +9,8 @@
 % To generate a video of a sample simulation, refer to MainScriptVideo.m
 
 clear all;
+addpath(genpath('src'))
+
 %% set default models and parameters
 
 % Define different halos via "config" structures

@@ -1,6 +1,9 @@
 %%
 %MassBins = [exp(-0.2:0.8:4.5) 200]%[0.8 2 3 4.5 6 10 25 40 300];
 clear
+
+addpath(genpath('src'))
+
 load(strcat('SimsBarMLS1.mat')) % load just to get some hyper parameters of sims. Be careful with this (in repurposing code)
 %%
 MassBins = [0.7 3 6 12 100];

@@ -1,3 +1,7 @@
+clear
+
+addpath(genpath('src'))
+
 modelName = 'NFWMLS';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
 load(strcat('Sims',modelName,modelNum,'.mat'))
 
