@@ -1,6 +1,6 @@
 clear
 %%
-%MassBins = [1 3 6 12 25];
+
 MassToLightRatio=1.6;
 
 [rperp,MGC] = ReadDataIntoMassSpecAndRad();
@@ -10,11 +10,10 @@ mbins3=exp(log(0.7):0.8:log(30));
 [AvgMass1,AvgRProj1,sizePoint1,NumBin1]=getMomentsMR([0.7 3 6 12 25]);
 [AvgMass2,AvgRProj2,sizePoint2,NumBin2]=getMomentsMR(exp(log(0.7):0.9:log(30)));
 [AvgMass3,AvgRProj3,sizePoint3,NumBin3]=getMomentsMR(exp(log(0.7):0.8:log(30)));
-%[AvgMass4,AvgRProj4,sizePoint4]=getMomentsMR(exp(log(0.8):0.6:log(23)));
 
 % in case last bin aligns in two binnings, shift a little
-AvgRProj1(end) = AvgRProj1(end)+0.00;
-%AvgRProj2(end) = AvgRProj2(end)-0.01;
+AvgRProj1(end) = AvgRProj1(end)+0.01;
+AvgRProj2(end) = AvgRProj2(end)-0.01;
 
 c2=[0.8500, 0.3250, 0.0980];
 c1=[0.4940, 0.1840, 0.5560]	;
@@ -45,7 +44,7 @@ end
     
 legend('All data','Luminosity-binned data')
 
-saveas(gcf,strcat('Plots/IntroCleanData.eps'),'epsc');
+%saveas(gcf,strcat('Plots/IntroCleanData.eps'),'epsc');
 
 %%
 figure

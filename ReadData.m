@@ -1,8 +1,8 @@
 
 function [tab] = ReadData()
 
-tab1=readSingleFile('../gal1_cat_2reff.dat');
-tab2=readSingleFile('../gal2_cat_2reff.dat');
+tab1=readSingleFile('gal1_cat_2reff.dat');
+tab2=readSingleFile('gal2_cat_2reff.dat');
 
 tab = [tab1' tab2']';
 %save('dat.mat','tab')
