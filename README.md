@@ -13,11 +13,14 @@ The above is a reproduction of the Hubble Space Telescope data of NGC5846-UDG1 g
 
 
 <p align="center">
-<img src="front_plots/BinnedData.png" height="350" alt="Binned GC data" title="Binned GC data">
-<img src="front_plots/SampleSimResults.png" height="350" alt="An example result of a simulation suite in an Burkert profile" title="Burkert profile">
+<img src="front_plots/BinnedData.png" height="300" alt="Binned GC data" title="Binned GC data">
+<img src="front_plots/SampleSimResults.png" height="300" alt="An example result of a simulation suite in an Burkert profile" title="Burkert profile">
 </p>
+The above on the left is projected-radii of candidate GCs vs. their estimated luminosity (taken from the raw data above), accompanied with luminosity-binned estimates. The figure indicates mass segregation that we may be able to explain from galactic dynamics.  
 
-The above is an example of the result of 40 realizations of 33 massive candidate globular clusters (GCs) of NGC5846-UDG1 in a Burkert profile, integrated over 10 Gyr. Initial conditions of GCs are taken to be common across different GC masses. The error-bars of simulations denote 1-&sigma; confidence intervals. Eq. (2) approx. refers to a simple analytic approximation developed in Bar et al. (2022) which reasonably agrees with simulations.
+The above on the right is an example of the result of 40 realizations of 33 massive candidate globular clusters (GCs) of NGC5846-UDG1 in a Burkert profile, integrated over 10 Gyr. Initial conditions of GCs are taken to be common across different GC masses. The error-bars of simulations denote 1-&sigma; confidence intervals. Eq. (2) approx. refers to a simple analytic approximation developed in Bar et al. (2022) which reasonably agrees with simulations.  
+
+Using the code, we find that galactic dynamics - dynamical friction, mostly - can provide a natural explanation for the mass segregation observed in the data.  
 
 ## Usage
 
