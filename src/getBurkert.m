@@ -14,7 +14,7 @@ rhoc   = 3*(70*KmSToKpcGyr/1000)^2/(8*pi*G);
 deltac = (200/3)*c^3/(log(1+c)-c/(1+c));
 rhos   = deltac*rhoc;
 
-rr=0:0.005:22*rs;
+rr=0:0.005:25*rs;
 
 Density = rhos./(((rr+rs)/rs).*(1+(rr/rs).^2));
 

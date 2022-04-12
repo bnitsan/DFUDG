@@ -3,8 +3,9 @@
 clear
 
 addpath(genpath('src'))
+addpath(genpath('data'))
 
-load(strcat('SimsBarMLS1.mat')) % load just to get some hyper parameters of sims. Be careful with this (in repurposing code)
+load(strcat('results/SimsNFWMLS1.mat')) % load just to get some hyper parameters of sims. Be careful with this (in repurposing code)
 %%
 MassBins = [0.7 3 6 12 100];
 cutRadius=3.8;
@@ -32,7 +33,7 @@ rNFWCrit = rC(find(TausC>10,1,'first'));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 modelName = 'BarMLS';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
-load(strcat('Sims',modelName,modelNum,'.mat'))
+load(strcat('results/Sims',modelName,modelNum,'.mat'))
 getLumRadVsMassSims3TwoCol(MassBins,St1A,['Stars. GCs obs. mass, $R_e^{(GC)}=' num2str(GCSersicRadiusBar) '$ kpc'],nSersicGCsBar,GCSersicRadiusBar,cutRadius,0,saveName,true);
 
 subplot(2,1,1)
@@ -45,7 +46,7 @@ saveas(gcf,strcat('Plots/',saveName,'TP.eps'),'epsc');
 
 %%
 modelName = 'ISOMLS';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
-load(strcat('Sims',modelName,modelNum,'.mat'))
+load(strcat('results/Sims',modelName,modelNum,'.mat'))
 getLumRadVsMassSims3TwoCol(MassBins,St1A,['Burkert. GCs of obs. mass, $R_e^{(GC)}=' num2str(GCSersicRadiusISO) '$ kpc'],nSersicGCsISO,GCSersicRadiusISO,cutRadius,0,saveName,true);
 
 subplot(2,1,1)
@@ -56,8 +57,48 @@ axis(axisCommon)
 saveas(gcf,strcat('Plots/',saveName,'TP.eps'),'epsc');
 %%
 modelName = 'NFWMLS';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
-load(strcat('Sims',modelName,modelNum,'.mat'))
+load(strcat('results/Sims',modelName,modelNum,'.mat'))
 getLumRadVsMassSims3TwoCol(MassBins,St1A,['NFW. GCs of obs. mass, $R_e^{(GC)}=' num2str(GCSersicRadiusNFW) '$ kpc'],nSersicGCsNFW,GCSersicRadiusNFW,cutRadius,0,saveName,true);
+
+subplot(2,1,1)
+plot(Mx,AvRProjNFW*exp(-(10/2/TauNFWEval)*(Mx/5).^1),'--','linewidth',1.3)
+legend('Data','Simulation','Initial condition','Poor theory control','Eq. (2) approx.','Location','SouthWest')%,'interpreter','latex'
+axis(axisCommon)
+
+saveas(gcf,strcat('Plots/',saveName,'TP.eps'),'epsc');
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Backbone Sims - Cuspy GCs %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+modelName = 'BarMLScg';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
+load(strcat('results/Sims',modelName,modelNum,'.mat'))
+getLumRadVsMassSims3TwoCol(MassBins,St1A,['Stars. GCs obs. mass, $R_e^{(GC)}=' num2str(GCSersicRadiusBar) '$ kpc, $n_{GC}=2$'],nSersicGCsBar,GCSersicRadiusBar,cutRadius,0,saveName,true);
+
+subplot(2,1,1)
+plot(Mx,AvRProjBar*exp(-(10/2/TauBarEval)*(Mx/5).^1),'--','linewidth',1.3)
+legend('Data','Simulation','Initial condition','Poor theory control','Eq. (2) approx.','Location','SouthWest')%,'interpreter','latex'
+axis(axisCommon)
+axis([0 20 0.8e-1 6.8])
+
+saveas(gcf,strcat('Plots/',saveName,'TP.eps'),'epsc');
+
+%%
+modelName = 'ISOMLScg';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
+load(strcat('results/Sims',modelName,modelNum,'.mat'))
+getLumRadVsMassSims3TwoCol(MassBins,St1A,['Burkert. GCs of obs. mass, $R_e^{(GC)}=' num2str(GCSersicRadiusISO) '$ kpc, $n_{GC}=2$'],nSersicGCsISO,GCSersicRadiusISO,cutRadius,0,saveName,true);
+
+subplot(2,1,1)
+plot(Mx,AvRProjISO*exp(-(10/2/TauISOEval)*(Mx/5).^1),'--','linewidth',1.3)
+legend('Data','Simulation','Initial condition','Poor theory control','Eq. (2) approx.','Location','SouthWest')%,'interpreter','latex'
+axis(axisCommon)
+
+saveas(gcf,strcat('Plots/',saveName,'TP.eps'),'epsc');
+%%
+modelName = 'NFWMLScg';modelNum  = '1'; saveName=strcat(modelName,modelNum,'s1A');
+load(strcat('results/Sims',modelName,modelNum,'.mat'))
+getLumRadVsMassSims3TwoCol(MassBins,St1A,['NFW. GCs of obs. mass, $R_e^{(GC)}=' num2str(GCSersicRadiusNFW) '$ kpc, $n_{GC}=2$'],nSersicGCsNFW,GCSersicRadiusNFW,cutRadius,0,saveName,true);
 
 subplot(2,1,1)
 plot(Mx,AvRProjNFW*exp(-(10/2/TauNFWEval)*(Mx/5).^1),'--','linewidth',1.3)

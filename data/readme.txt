@@ -1,0 +1,1 @@
+The data here is the catalogue of GC candidates that we use in the paper, based on Danieli et al. (2022).

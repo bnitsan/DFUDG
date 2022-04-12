@@ -11,7 +11,7 @@ bnSersic=(-1/3)+(-2194697/30690717750).*nSersic.^(-4)+(131/1148175).* ...
 
 r0Sersic=r0;
 
-rr=0:0.01:22*r0Sersic;
+rr=0:0.01:28*r0Sersic;
 Density = zeros(length(rr),1);
 for i=1:length(rr)
     r=rr(i);
@@ -21,10 +21,9 @@ for i=1:length(rr)
     -1/2);
     Density(i)=integral(IntRho,r,inf);
 end
+Density(1) = Density(2); % this is meaningless for small values of nSersic, since it is the same as demanding a core-like behaviour. For larger values, the above expression can fail and should be regulated.
 
 Mass(1)=0;
-%disp(size(rr))
-%disp(size(Density))
 for i=2:length(rr)
     Mass(i)=trapz(rr(1:i)',4*pi*rr(1:i)'.^2.*Density(1:i));
 end
@@ -48,11 +47,15 @@ for i=1:length(rr)-1
     sigma2(i)=(1/Density(i))*trapz(rr(i:end),intsigma2(i:end));
 end
 Sigma = sqrt(sigma2);
-Mass = Mass';
 
 
-%r0Sersic=r0;
-r=rr';%*r0Sersic;
+
+%Mass = Mass';
+%r=rr';
+r=rr;
+Density = Density';
+Sigma = Sigma';
+Phi = Phi';
 
 end
 

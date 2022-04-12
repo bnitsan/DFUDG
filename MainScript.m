@@ -1,6 +1,6 @@
 % This script runs the main simulations Bar, Danieli & Blum, arXiv:2202.10179
 %
-% It stars by defining the parameters for simulations in different halos,
+% It starts by defining the parameters for simulations in different halos,
 % followed by a suite of ~40 runs for each halo configuration.
 % 
 % To generate the plots in the paper (Fig. 5, 6 and appendices), refer to
@@ -15,24 +15,24 @@ addpath(genpath('data'))
 %% set default models and parameters
 
 % Define different halos via "config" structures
-HaloParamBar.type = 1; % 1-Sersic
+HaloParamBar.type    = 1; % 1-Sersic
 HaloParamBar.nSersic = 0.61;
 HaloParamBar.MSersic = 1.2e3;
 HaloParamBar.rSersic = 1.9;
-HaloParamBar.rStall = (HaloParamBar.rSersic)*0.3;
+HaloParamBar.rStall  = (HaloParamBar.rSersic)*0.3;
 
-HaloParamNFW.type = 2; % 2-NFW
-HaloParamNFW.NFWRs = 6;
-HaloParamNFW.NFWc = 6;
+HaloParamNFW.type   = 2; % 2-NFW
+HaloParamNFW.NFWRs  = 6;
+HaloParamNFW.NFWc   = 6;
 HaloParamNFW.rStall = 0.01;
 
-HaloParamISO.type = 3; % 3 - Burkert
-HaloParamISO.BurRs = 2;
-HaloParamISO.Burc = 15;
-HaloParamISO.rStall = (HaloParamISO.BurRs)*0.3; %*0.3
+HaloParamISO.type   = 3; % 3 - Burkert
+HaloParamISO.BurRs  = 2;
+HaloParamISO.Burc   = 15;
+HaloParamISO.rStall = (HaloParamISO.BurRs)*0.3; 
 
 % GCs initial 
-GCSersicRadiusBar = 4.5; nSersicGCsBar = 0.61; % baryon
+GCSersicRadiusBar = 4.5; nSersicGCsBar = 0.61; 
 GCSersicRadiusNFW = 2.5; nSersicGCsNFW = 0.61;
 GCSersicRadiusISO = 2.6; nSersicGCsISO = 0.61; 
 
@@ -41,13 +41,13 @@ GnFrac=1;
 TauFudgeFactorOverll=1;
 SimTime=10.05;
 
-TidalRadius=20; %where to cut GCs
-SofteningRadKpc=0.007; % Plummer-softening of GCs
-IsoVsCircFlag=0;       % 0: isotropic dist, 1: circ dist
+TidalRadius = 20;        % where to cut GCs
+SofteningRadKpc = 0.007; % Plummer-softening of GCs
+IsoVsCircFlag = 0;       % 0: isotropic dist, 1: circ dist
 
-tolFactor=3e6; % in comparison to 1e-13/1e-12 rel/abs or so built-in the code
+tolFactor = 3e6;  % in comparison to 1e-13/1e-12 rel/abs or so built-in the code
 
-NUMExamples=1; % simulations number in each 
+NUMExamples = 40; % simulations number in each 
 
 deltaTCoarseTime = 0.005; % time-step after saving 
 dtFactor = 0.5; 
@@ -65,18 +65,44 @@ TotalLossFraction = (1/3)/10; % third mass loss over 10Gyr
 %% NFW halo 1
 HaloParam = HaloParamNFW;
 [St1A]=runSuiteSameStar(deltaTCoarseTime,NUMExamples,HaloParam,GCSersicRadiusNFW,nSersicGCsNFW,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
-save('SimsNFWMLS1.mat')
+save('results/SimsNFWMLS1.mat')
 clear St1A
 %% ISO halo 1
 HaloParam = HaloParamISO;
 [St1A]=runSuiteSameStar(deltaTCoarseTime,NUMExamples,HaloParam,GCSersicRadiusISO,nSersicGCsISO,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
-save('SimsISOMLS1.mat')
+save('results/SimsISOMLS1.mat')
 clear St1A
 %% BAR halo 1
 HaloParam = HaloParamBar;
 [St1A]=runSuiteSameStar(deltaTCoarseTime,NUMExamples,HaloParam,GCSersicRadiusBar,nSersicGCsBar,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
-save('SimsBarMLS1.mat')
+save('results/SimsBarMLS1.mat')
 clear St1A
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Paper backbone Alt nGC %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+GCSersicRadiusBar = 4.8; nSersicGCsBar = 2.0; 
+GCSersicRadiusNFW = 3.0; nSersicGCsNFW = 2.0;
+GCSersicRadiusISO = 2.7; nSersicGCsISO = 2.0; 
+%% NFW halo 1
+HaloParam = HaloParamNFW;
+[St1A]=runSuiteSameStar(deltaTCoarseTime,NUMExamples,HaloParam,GCSersicRadiusNFW,nSersicGCsNFW,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
+save('results/SimsNFWMLScg1.mat')
+clear St1A
+%% ISO halo 1
+HaloParam = HaloParamISO;
+[St1A]=runSuiteSameStar(deltaTCoarseTime,NUMExamples,HaloParam,GCSersicRadiusISO,nSersicGCsISO,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
+save('results/SimsISOMLScg1.mat')
+clear St1A
+%% BAR halo 1
+HaloParam = HaloParamBar;
+[St1A]=runSuiteSameStar(deltaTCoarseTime,NUMExamples,HaloParam,GCSersicRadiusBar,nSersicGCsBar,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
+save('results/SimsBarMLScg1.mat')
+clear St1A
+
 
 
 %%
@@ -182,8 +208,7 @@ MergeRadiusDef = MergeRadius;
 MergeRadius = 0.02;
 GnFracDef=GnFrac;
 GnFrac = 0.001;
-%TotalLossFractionDef = TotalLossFraction;
-%TotalLossFraction = 1e-6;
+
 %% NFW halo 1
 HaloParam = HaloParamNFW;
 [St1A]=runSuiteSameStar(deltaTCoarseTime,10,HaloParam,GCSersicRadiusNFW,nSersicGCsNFW,SimTime,GnFrac,TauFudgeFactorOverll,IsoVsCircFlag,SofteningRadKpc,TidalRadius,tolFactor,dtFactor,MergeRadius,MGCMhaloRestrictFraction,TotalLossFraction);
@@ -199,7 +224,7 @@ GnFrac=GnFracDef;
 MGCMhaloRestrictFraction = MGCMhaloRestrictFractionDef;
 SimTime = SimTimeDef;
 MergeRadius = MergeRadiusDef;
-%TotalLossFraction = TotalLossFractionDef;
+
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -361,7 +386,7 @@ end
 
 
 function sx2 = ReduceStruct(sx,deltaT,M0,sigma)
-%deltaT=0.01;
+% a function that down-samples a simulation to steps deltaT
 NT=round(sx.TTT(end)/deltaT);
 TTTind=zeros(length(NT),1);
 TTTind(1)=1;
