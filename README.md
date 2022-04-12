@@ -1,4 +1,4 @@
-# DFUDGs
+# DFUDG
 
 An N-body simulation with semi-analytic dynamical friction, geared towards dynamics of globular-cluster rich ultra-diffuse galaxies.
 
@@ -9,9 +9,9 @@ Here we reproduce some of the main figures from [Bar et al. (2022)](https://arxi
 <p align="center">
 <img src="front_plots/CoarseData.png" width="550" alt="An example result of a simulation suite in an Burkert profile" title="Burkert profile">
 </p>
-The above is a reproduction of the Hubble Space Telescope data of NGC5846-UDG1 galaxy from Danieli et al. (2022), binned into luminosity bins with circles charcterising the stellar body.
-
-
+The above is a reproduction of the Hubble Space Telescope data of NGC5846-UDG1 galaxy and a nearby field from Danieli et al. (2022), indicating globular-cluster (GC) candidates. On the right, the data is binned into luminosity bins with circles charcterising the stellar body. We primarily use a subset of the data in the high-luminosity end as it is weakly affected by contamination.  
+  
+  
 <p align="center">
 <img src="front_plots/BinnedData.png" height="300" alt="Binned GC data" title="Binned GC data">
 <img src="front_plots/SampleSimResults.png" height="300" alt="An example result of a simulation suite in an Burkert profile" title="Burkert profile">
@@ -20,7 +20,7 @@ The above on the left is projected-radii of candidate GCs vs. their estimated lu
 
 The above on the right is an example of the result of 40 realizations of 33 massive candidate globular clusters (GCs) of NGC5846-UDG1 in a Burkert profile, integrated over 10 Gyr. Initial conditions of GCs are taken to be common across different GC masses. The error-bars of simulations denote 1-&sigma; confidence intervals. Eq. (2) approx. refers to a simple analytic approximation developed in Bar et al. (2022) which reasonably agrees with simulations.  
 
-Using the code, we find that galactic dynamics - dynamical friction, mostly - can provide a natural explanation for the mass segregation observed in the data.  
+Using the code, we find that galactic dynamics - dynamical friction, mostly - can provide a natural explanation for the mass segregation observed in the data. We hope that the code will be useful for future studies of similar galaxies.  
 
 ## Usage
 
